@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+</head>
+<body>
+    <canvas id = "stage" width = "400" height = "400"></canvas>
+    <script type = "text/javascript">
+
+        window.onload = function(){
+            var stage = document.getElementById('stage');
+            var context = stage.getContext('2d');
+            
+            document.addEventListener('keydown', keyPush);
+            
+            setInterval(game, 60);
+
+            const velocidade = 1;
+
+            var velocidadeX = velocidadeY = 0;
+            var pontoX = pontoY = 10;
+            var celula = 20;
+            var quantidadeCelula = 20;
+            var comidaX = comidaY = 15;
+
+            var area = [];
+            corpo = 5;
+
+            function game(){
+                
+                pontoX += velocidadeX;
+                pontoY += velocidadeY;
+                if(pontoX < 0){
+                    pontoX = quantidadeCelula - 1;
+                }
+                if(pontoX > quantidadeCelula - 1){
+                    pontoX = quantidadeCelula;
+                }
+                if(pontoY < 0){
+                    pontoY = quantidadeCelula - 1;
+                }
+                if(pontoY > quantidadeCelula - 1){
+                    pontoY = 0;
+                }
+
+
+
+                context.fillStyle = 'black';
+                context.fillRect(0,0, stage.width, stage.height);
+
+                context.fillStyle = 'red';
+                context.fillRect(comidaX * celula, comidaY * celula, celula, celula);
+
+                context.fillStyle = 'gray';
+                for(var i = 0; i < area.length; i++){
+                    context.fillRect(area[i].x * celula, area[i].y * celula, celula, celula);
+                    if(area[i].x == pontoX && area[i].y == pontoY){
+                        velocidadeX = velocidadeY = 0;
+                    }
+                }
+
+                area.push({x: pontoX, y: pontoY})
+                while (area.length > corpo){
+                    area.shift();
+                }
+
+                if(comidaX == pontoX && comidaY == pontoY){
+                    corpo++;
+                    comidaX = Math.floor(Math.random() * quantidadeCelula);
+                    comidaY = Math.floor(Math.random() * quantidadeCelula);
+                }
+            }
+
+            function keyPush(event){
+
+                switch (event.keyCode) {
+                    case 37://Esquerda
+                        velocidadeX = -velocidade;
+                        velocidadeY = 0;
+                        break;
+                    case 38://Cima
+                        velocidadeX = 0;
+                        velocidadeY = -velocidade;
+                        break;
+                    case 39://Direita
+                        velocidadeX = velocidade;
+                        velocidadeY = 0;
+                         break;
+                    case 40://Baixo
+                        velocidadeX = 0;
+                        velocidadeY = velocidade;
+                        break;
+                    }
+                }
+                 
+        }
+
+
+    </script>
+</body>
+</html>
