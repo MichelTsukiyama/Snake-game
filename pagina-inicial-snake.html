@@ -16,8 +16,8 @@
             
             document.addEventListener('keydown', keyPush);
             
-            setInterval(game, 60);
-
+            setInterval(game, 80);
+            
             const velocidade = 1;
 
             var velocidadeX = velocidadeY = 0;
@@ -26,7 +26,7 @@
             var quantidadeCelula = 20;
             var comidaX = comidaY = 15;
 
-            var area = [];
+            var rastro = [];
             corpo = 5;
 
             function game(){
@@ -37,7 +37,7 @@
                     pontoX = quantidadeCelula - 1;
                 }
                 if(pontoX > quantidadeCelula - 1){
-                    pontoX = quantidadeCelula;
+                    pontoX = 0;
                 }
                 if(pontoY < 0){
                     pontoY = quantidadeCelula - 1;
@@ -54,17 +54,18 @@
                 context.fillStyle = 'red';
                 context.fillRect(comidaX * celula, comidaY * celula, celula, celula);
 
-                context.fillStyle = 'gray';
-                for(var i = 0; i < area.length; i++){
-                    context.fillRect(area[i].x * celula, area[i].y * celula, celula, celula);
-                    if(area[i].x == pontoX && area[i].y == pontoY){
+                context.fillStyle = 'green';
+                for(var i = 0; i < rastro.length; i++){
+                    context.fillRect(rastro[i].x * celula, rastro[i].y * celula, celula-1, celula-1);
+                    if(rastro[i].x == pontoX && rastro[i].y == pontoY){
                         velocidadeX = velocidadeY = 0;
+                        corpo = 5;
                     }
                 }
 
-                area.push({x: pontoX, y: pontoY})
-                while (area.length > corpo){
-                    area.shift();
+                rastro.push({x: pontoX, y: pontoY})
+                while (rastro.length > corpo){
+                    rastro.shift();
                 }
 
                 if(comidaX == pontoX && comidaY == pontoY){
@@ -78,18 +79,30 @@
 
                 switch (event.keyCode) {
                     case 37://Esquerda
+                        if(velocidadeX == velocidade && velocidadeY == 0){
+                            break
+                        }
                         velocidadeX = -velocidade;
                         velocidadeY = 0;
                         break;
                     case 38://Cima
+                    if(velocidadeX == 0 && velocidadeY == velocidade){
+                            break
+                        }
                         velocidadeX = 0;
                         velocidadeY = -velocidade;
                         break;
                     case 39://Direita
+                        if(velocidadeX == -velocidade && velocidadeY == 0){
+                            break
+                        }
                         velocidadeX = velocidade;
                         velocidadeY = 0;
                          break;
                     case 40://Baixo
+                            if(velocidadeX == 0 && velocidadeY == -velocidade){
+                            break
+                        }
                         velocidadeX = 0;
                         velocidadeY = velocidade;
                         break;
